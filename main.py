@@ -1,8 +1,34 @@
 import tkinter as tk
 from tkinter import messagebox
+import random
 
 
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
+
+def password_generator():
+    letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u',
+               'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P',
+               'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
+    numbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+    symbols = ['!', '#', '$', '%', '&', '(', ')', '*', '+']
+
+    nr_letters = random.randint(8, 10)
+    nr_symbols = random.randint(2, 4)
+    nr_numbers = random.randint(2, 4)
+
+    password_list = []
+
+    rand_letters = [random.choice(letters) for num1 in range(nr_letters)]
+    rand_numbers = [random.choice(numbers) for num2 in range(nr_symbols)]
+    rand_symbols = [random.choice(symbols) for num3 in range(nr_numbers)]
+
+    password_list = rand_letters + rand_numbers + rand_symbols
+    random.shuffle(password_list)
+    password = ''.join(password_list)
+
+    password_entry.delete(0, 'end')
+    password_entry.insert(0, password)
+
 
 # ---------------------------- SAVE PASSWORD ------------------------------- #
 def save():
@@ -19,11 +45,10 @@ def save():
                 file.write(f'{email_txt} | {website_txt} | {password_txt}\n')
 
             website_entry.delete(0, 'end')
-            email_entry.delete(0, 'end')
+            # email_entry.delete(0, 'end')
             password_entry.delete(0, 'end')
     else:
         error = messagebox.showerror(title='Attention!', message='Fill All the Entry')
-        print(error)
 
 
 # ---------------------------- UI SETUP ------------------------------- #
@@ -64,7 +89,7 @@ password_entry.grid(row=3, column=1)
 
 # Button Widget --------------------------------------
 
-generate_button = tk.Button(text='Generate Password')
+generate_button = tk.Button(text='Generate Password', command=password_generator)
 generate_button.grid(row=3, column=2)
 
 add_button = tk.Button(text="Add", width=43, command=save)
