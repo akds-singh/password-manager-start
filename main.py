@@ -1,3 +1,4 @@
+import json
 import tkinter as tk
 from tkinter import messagebox
 import random
@@ -37,16 +38,33 @@ def save():
     password_txt = password_entry.get()
     # info = messagebox.showinfo(title='empty filed', message='fill all the entry')
     # print(info)
+    data = {website_txt: {'email': email_txt,
+                          'password': password_txt,
+                          }
 
+            }
     if len(email_txt) and len(website_txt) and len(password_txt):
         want_to_save = messagebox.askyesno(title='ask yes/no', message='Want to save?')
         if want_to_save:
-            with open('data.txt', 'a') as file:
-                file.write(f'{email_txt} | {website_txt} | {password_txt}\n')
+            try:
+                with open('data.json', 'r') as file_data:
+                    data_dict = json.load(fp=file_data)
+            except FileNotFoundError:
+                print('FileNotFoundError')
+                with open('data.json', 'w') as file_data:
+                    json.dump(data, fp=file_data, indent=4)
+            except json.decoder.JSONDecodeError:
+                print('json.decoder.JSONDecodeError')
+                with open('data.json', 'w') as file_data:
+                    json.dump(data, fp=file_data, indent=4)
+            else:
+                data_dict.update(data)
+                with open('data.json', 'w') as file_data:
+                    json.dump(data_dict, fp=file_data, indent=4)
+            finally:
+                website_entry.delete(0, 'end')
+                password_entry.delete(0, 'end')
 
-            website_entry.delete(0, 'end')
-            # email_entry.delete(0, 'end')
-            password_entry.delete(0, 'end')
     else:
         error = messagebox.showerror(title='Attention!', message='Fill All the Entry')
 

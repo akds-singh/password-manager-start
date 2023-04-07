@@ -1,15 +1,19 @@
-import tkinter as tk
-from tkinter import *
+import json
 
-root = tk.Tk()
+dict_test = {
+    "asd": {
+        "email": "aksky9835@gmail.com",
+        "password": "+5s$YgbXX5oo*"
+    }
+}
+with open('data.json', 'r') as file:
+    data_dict = json.load(fp=file)
+    # json.dump(dict_test, fp=file, indent=4)
 
-def clear_entry():
-    entry.delete(0, END)
+dict_test.update({'akash:123':123})
+dict_test.update(data_dict)
 
-entry = Entry()
-entry.grid(row=0, column=1)
+with open('data.json', 'w') as file:
+    json.dump(dict_test, fp=file, indent=4)
 
-button = Button(root, text="Clear", command=clear_entry)
-button.grid(row=1, column=1)
-
-root.mainloop()
+print(dict_test)
