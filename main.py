@@ -4,6 +4,36 @@ from tkinter import messagebox
 import random
 
 
+# -----------------------------Search Email Password------------------------------#
+def search():
+    # get the entry text from email entry filed
+    website_entry_data = website_entry.get()
+    print(website_entry_data)
+    # check weather the value get from above is available in Json file:
+    try:
+        with open('data.json', 'r') as file:
+            data_dict = json.load(file)
+    except json.decoder.JSONDecodeError:
+        messagebox.showerror(title='Oops', message=f'JSON file is empty')
+    except FileNotFoundError:
+        with open('data.json', 'w') as file:
+            pass
+    else:
+        # print(data_dict)
+        if website_entry_data in data_dict.keys():
+            email = data_dict[website_entry_data]['email']
+            # print(email)
+            password = data_dict[website_entry_data]['password']
+            # print(password)
+            messagebox.showinfo(title='available', message=f'{website_entry_data}\nEmail Id: {email}\nPassword: {password} ')
+            # print('available')
+        else:
+            # print('not available')
+            messagebox.showerror(title='Oops', message=f"Email and Password for  '{website_entry_data}' is not available")
+        # if id is not available then prompt 'not available'
+        # else if available then fetch the is form Json and Prompt the data to user
+
+
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
 
 def password_generator():
@@ -94,8 +124,8 @@ password_label.grid(row=3, column=0)
 
 # Entry Widget---------------------------------------
 text = 'akash'
-website_entry = tk.Entry(width=51, )
-website_entry.grid(row=1, column=1, columnspan=2)
+website_entry = tk.Entry(width=33)
+website_entry.grid(row=1, column=1, )
 website_entry.focus()
 
 email_entry = tk.Entry(width=51, )
@@ -113,4 +143,6 @@ generate_button.grid(row=3, column=2)
 add_button = tk.Button(text="Add", width=43, command=save)
 add_button.grid(row=4, column=1, columnspan=2)
 
+search_button = tk.Button(text='Search', width=15, command=search)
+search_button.grid(row=1, column=2)
 window.mainloop()
